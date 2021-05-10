@@ -6,6 +6,9 @@
 
 DBMS 主要通过数据的保存格式（数据库的种类）来进行分类，现阶段主要有以下 5 种类型：
 
-层次数据库（Hierarchical Database，HDB）\\
-关系数据库（Relational Database，RDB）
-这种类型的 DBMS 称为关系数据库管理系统（Relational Database Management System，RDBMS）。比较具有代表性的 RDBMS 有如下 5 种。
+层次数据库（Hierarchical Database，HDB）  
+关系数据库（Relational Database，RDB），这种类型的 DBMS 称为关系数据库管理系统（Relational Database Management System，RDBMS）。比较具有代表性的 RDBMS 有如下 5 种：  
+面向对象数据库（Object Oriented Database，OODB）  
+XML数据库（XML Database，XMLDB）  
+键值存储系统（Key-Value Store，KVS），举例：MongoDB  
+
