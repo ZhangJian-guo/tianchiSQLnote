@@ -116,4 +116,19 @@ RDBMS最常见的系统结构就是客户端 / 服务器类型（C/S类型）这
 
 编写一条 CREATE TABLE 语句，用来创建一个包含表 1-A 中所列各项的表 Addressbook （地址簿），并为 regist_no （注册编号）列设置主键约束。
 
-![表1-A](https://img.alicdn.com/imgextra/i2/O1CN01yUhR8r1b2S3GHfh4B_!!6000000003407-2-tps-653-319.png,　"表 Addressbook （地址簿）中的列")
+![表1-A](/images/表1-A.png,　"表 Addressbook （地址簿）中的列")
+
+## 3.2
+
+假设在创建练习1.1中的 Addressbook 表时忘记添加如下一列 postal_code （邮政编码）了，请把此列添加到 Addressbook 表中。  
+列名 ： postal_code  
+数据类型 ：定长字符串类型（长度为 8）  
+约束 ：不能为 NULL
+
+## 3.3
+
+编写 SQL 语句来删除 Addressbook 表。
+
+## 3.4
+
+编写 SQL 语句来恢复删除掉的 Addressbook 表。
