@@ -90,6 +90,11 @@ GROUP BY 子句中不能使用SELECT 子句中定义的别名，但是在 ORDER 
      GROUP BY product_type 
      WHERE regist_date > '2009-09-01';
 
+错误：
+- product_name不可聚合
+- WHERE在GROUP BY之前，FROM之后
+- GROUP BY product_type之后不能SELECT product_id
+
 ## 练习题6
 
 请编写一条SELECT语句，求出销售单价（sale_price列）合计值大于进货单价（purchase_price列）合计值1.5倍的商品种类。执行结果如下所示。
@@ -99,6 +104,9 @@ GROUP BY 子句中不能使用SELECT 子句中定义的别名，但是在 ORDER 
 |衣服         | 5000 | 3300 |
 |办公用品     |  600 | 320  |
 
+    SELECT product_type, SUM(sale_price), SUM(urchase_price) FROM product GROUP BY product_type HAVING SUM(sale_price) > SUM(purchase_price) * 1.5 
+
 ## 练习题7
 
 此前我们曾经使用SELECT语句选取出了product（商品）表中的全部记录。当时我们使用了ORDERBY子句来指定排列顺序，但现在已经无法记起当时如何指定的了。请根据下列执行结果，思考ORDERBY子句的内容。
+
