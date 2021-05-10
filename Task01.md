@@ -116,7 +116,7 @@ RDBMS最常见的系统结构就是客户端 / 服务器类型（C/S类型）这
 
 编写一条 CREATE TABLE 语句，用来创建一个包含表 1-A 中所列各项的表 Addressbook （地址簿），并为 regist_no （注册编号）列设置主键约束。
 
-![表1-A](/images/表1-A.png,　"表 Addressbook （地址簿）中的列")
+![table1-A](/images/表1-A.png)
 
 ## 3.2
 
