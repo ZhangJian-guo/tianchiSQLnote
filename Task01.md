@@ -69,19 +69,21 @@ RDBMS最常见的系统结构就是客户端 / 服务器类型（C/S类型）这
 
       ALTER TABLE < 表名 > ADD COLUMN < 列的定义 >;
 
-如：添加一列可以存储100位的可变长字符串的 product_name_pinyin 列：
+  如：添加一列可以存储100位的可变长字符串的 product_name_pinyin 列：
 
-    ALTER TABLE product ADD COLUMN product_name_pinyin VARCHAR(100);
+      ALTER TABLE product ADD COLUMN product_name_pinyin VARCHAR(100);
 
 - 删除列：
       
       ALTER TABLE < 表名 > DROP COLUMN < 列名 >;
 
-- 清空表内容
+- 清空表内容：
 
       TRUNCATE TABLE TABLE_NAME;
 
-优点：相比`drop/delete`，`truncate`用来清除数据时，速度最快。
+  优点：相比`drop/delete`，`truncate`用来清除数据时，速度最快。
+
+- 数据的更新：
 
 
 
