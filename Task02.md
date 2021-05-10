@@ -1,13 +1,27 @@
 本笔记为阿里云天池龙珠计划SQL训练营的学习内容，链接为：https://tianchi.aliyun.com/specials/promotion/aicampsql；
 
-#  逻辑运算符：含有NULL时的真值
+#  重要知识点总结
+
+## 逻辑运算符：含有NULL时的真值
 
 NULL的真值结果既不为真，也不为假
 
 - TRUE and UNKNOWN is UNKNOWN, FALSE and UNKNOWN is FALSE
 - TRUE or UNKNOWN is TRUE, FALSE or UNKNOWN is UNKNOWN
 
-# 练习题-第一部分
+## 聚合键中包含NULL
+
+此时会将NULL作为一组特殊数据进行处理。
+
+## ORDER BY中列名可使用别名
+
+GROUP BY 子句中不能使用SELECT 子句中定义的别名，但是在 ORDER BY 子句中却可以使用别名。这是因为SQL在使用 HAVING 子句时 SELECT 语句的执行顺序为：
+
+    FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY
+
+其中SELECT的执行顺序在 GROUP BY 子句之后，ORDER BY 子句之前。也就是说，当在ORDER BY中使用别名时，已经知道了SELECT设置的别名存在，但是在GROUP BY中使用别名时还不知道别名的存在，所以**在ORDER BY中可以使用别名，但是在GROUP BY中不能使用别名**。
+
+# 练习题
 
 ## 练习题1
 
@@ -64,6 +78,27 @@ NULL的真值结果既不为真，也不为假
 
     SELECT product_name, product_type, saleprice * 0.9 - purchase_price AS profit 
     FROM product 
-    WHERE saleprice * 0.9 - purchase_price > 100 AND (product_type = '办公用品' OR product_type = '厨房用具')
+    WHERE saleprice * 0.9 - purchase_price > 100 AND (product_type = '办公用品' OR product_type = '厨房用具');
 
+## 练习题5
 
+请指出下述SELECT语句中所有的语法错误。
+
+    SELECT product_id, SUM（product_name）
+    --本SELECT语句中存在错误。
+      FROM product 
+     GROUP BY product_type 
+     WHERE regist_date > '2009-09-01';
+
+## 练习题6
+
+请编写一条SELECT语句，求出销售单价（sale_price列）合计值大于进货单价（purchase_price列）合计值1.5倍的商品种类。执行结果如下所示。
+
+|product_type | sum  | sum  |
+|-------------|------|------|
+|衣服         | 5000 | 3300 |
+|办公用品     |  600 | 320  |
+
+## 练习题7
+
+此前我们曾经使用SELECT语句选取出了product（商品）表中的全部记录。当时我们使用了ORDERBY子句来指定排列顺序，但现在已经无法记起当时如何指定的了。请根据下列执行结果，思考ORDERBY子句的内容。
