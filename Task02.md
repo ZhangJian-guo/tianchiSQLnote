@@ -113,3 +113,6 @@ GROUP BY 子句中不能使用SELECT 子句中定义的别名，但是在 ORDER 
 
 此前我们曾经使用SELECT语句选取出了product（商品）表中的全部记录。当时我们使用了ORDERBY子句来指定排列顺序，但现在已经无法记起当时如何指定的了。请根据下列执行结果，思考ORDERBY子句的内容。
 
+![table2-7](/images/table2-7.png)
+
+日期倒序，销售价格升序。
