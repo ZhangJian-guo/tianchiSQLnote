@@ -85,5 +85,35 @@ RDBMS最常见的系统结构就是客户端 / 服务器类型（C/S类型）这
 
 - 数据的更新：
 
+      UPDATE <表名>
+      SET <列名> = <表达式> [, <列名2>=<表达式2>...];  
+      WHERE <条件>;  -- 可选，非常重要。
+      ORDER BY 子句;  --可选
+      LIMIT 子句; --可选
 
+  使用 UPDATE 也可以将列更新为 NULL（该更新俗称为NULL清空）。此时只需要将赋值表达式右边的值直接写为 NULL 即可。
+  和 INSERT 语句一样， UPDATE 语句也可以将 NULL 作为一个值来使用。
+  **但是，只有未设置 NOT NULL 约束和主键约束的列才可以清空为NULL。**如果将设置了上述约束的列更新为 NULL，就会出错，这点与INSERT 语句相同。
 
+- 多列更新
+
+  UPDATE 语句的 SET 子句支持同时将多个列作为更新对象。
+
+      UPDATE product
+         SET sale_price = sale_price * 10,
+             purchase_price = purchase_price / 2
+       WHERE product_type = '厨房用具';  
+
+- 插入数据
+
+      INSERT INTO <表名> (列1, 列2, 列3, ……) VALUES (值1, 值2, 值3, ……);  
+      
+  对表进行全列 INSERT 时，可以省略表名后的列清单。这时 VALUES子句的值会默认按照从左到右的顺序赋给每一列。
+  
+# 3 练习题
+
+## 3.1 
+
+编写一条 CREATE TABLE 语句，用来创建一个包含表 1-A 中所列各项的表 Addressbook （地址簿），并为 regist_no （注册编号）列设置主键约束。
+
+![表1-A](https://img.alicdn.com/imgextra/i2/O1CN01yUhR8r1b2S3GHfh4B_!!6000000003407-2-tps-653-319.png,　"表 Addressbook （地址簿）中的列")
