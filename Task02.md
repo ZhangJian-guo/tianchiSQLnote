@@ -104,7 +104,10 @@ GROUP BY 子句中不能使用SELECT 子句中定义的别名，但是在 ORDER 
 |衣服         | 5000 | 3300 |
 |办公用品     |  600 | 320  |
 
-    SELECT product_type, SUM(sale_price), SUM(urchase_price) FROM product GROUP BY product_type HAVING SUM(sale_price) > SUM(purchase_price) * 1.5 
+    SELECT product_type, SUM(sale_price), SUM(urchase_price) 
+    FROM product 
+    GROUP BY product_type 
+    HAVING SUM(sale_price) > SUM(purchase_price) * 1.5 
 
 ## 练习题7
 
