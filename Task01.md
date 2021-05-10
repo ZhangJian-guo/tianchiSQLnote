@@ -119,7 +119,7 @@ RDBMS最常见的系统结构就是客户端 / 服务器类型（C/S类型）这
 ![table1-A](/images/表1-A.png)
 
     CREATE TABLE Addressbook(
-         regist_no INT NOT NULL PRIMARY KEY,
+         regist_no INTEGER NOT NULL PRIMARY KEY,
          name VARCHAR(128) NOT NULL,
          address VARCHAR(256) NOT NULL,
          tel_no CHAR(10),
