@@ -45,13 +45,13 @@ RDBMS最常见的系统结构就是客户端 / 服务器类型（C/S类型）这
 
     CREATE TABLE < 表名 >
     ( < 列名 1> < 数据类型 > < 该列所需约束 > ,
-    < 列名 2> < 数据类型 > < 该列所需约束 > ,
-    < 列名 3> < 数据类型 > < 该列所需约束 > ,
-    < 列名 4> < 数据类型 > < 该列所需约束 > ,
-    .
-    .
-    .
-    < 该表的约束 1> , < 该表的约束 2> ,……);
+      < 列名 2> < 数据类型 > < 该列所需约束 > ,
+      < 列名 3> < 数据类型 > < 该列所需约束 > ,
+      < 列名 4> < 数据类型 > < 该列所需约束 > ,
+      .
+      .
+      .
+      < 该表的约束 1> , < 该表的约束 2> ,……);
     
 创建表时，只能使用半角英文字母、数字、下划线（_）作为数据库、表和列的名称，名称必须以半角英文字母开头
 
@@ -118,6 +118,14 @@ RDBMS最常见的系统结构就是客户端 / 服务器类型（C/S类型）这
 
 ![table1-A](/images/表1-A.png)
 
+    CREATE TABLE Addressbook(
+         regist_no INT NOT NULL PRIMARY KEY,
+         name VARCHAR(128) NOT NULL,
+         address VARCHAR(256) NOT NULL,
+         tel_no CHAR(10),
+         mail_address CHAR(20)
+    );
+
 ## 3.2
 
 假设在创建练习1.1中的 Addressbook 表时忘记添加如下一列 postal_code （邮政编码）了，请把此列添加到 Addressbook 表中。  
@@ -125,10 +133,23 @@ RDBMS最常见的系统结构就是客户端 / 服务器类型（C/S类型）这
 数据类型 ：定长字符串类型（长度为 8）  
 约束 ：不能为 NULL
 
+    ALTER TABLE Addressbook ADD COLUMN postal_code CHAR(8) NOT NULL;
+
 ## 3.3
 
 编写 SQL 语句来删除 Addressbook 表。
 
+    DROP TABLE Addressbook;
+
 ## 3.4
 
 编写 SQL 语句来恢复删除掉的 Addressbook 表。
+
+    CREATE TABLE Addressbook(
+         regist_no INT NOT NULL PRIMARY KEY,
+         name VARCHAR(128) NOT NULL,
+         address VARCHAR(256) NOT NULL,
+         tel_no CHAR(10),
+         mail_address CHAR(20),
+         postal_code CHAR(8) NOT NULL
+    );
