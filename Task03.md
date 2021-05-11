@@ -97,23 +97,66 @@
 
 ### 日期函数
 
+- CURRENT_DATE – 获取当前日期
+- CURRENT_TIME – 当前时间
+- CURRENT_TIMESTAMP – 当前日期和时间
+- EXTRACT – 截取日期元素。`EXTRACT(日期元素 FROM 日期)`
+
 ### 转换函数
+
+- CAST – 类型转换。`CAST（转换前的值 AS 想要转换的数据类型）`
+- COALESCE – 将NULL转换为其他值。`COALESCE(数据1，数据2，数据3……)`。COALESCE 是 SQL 特有的函数。该函数会返回可变参数 A 中左侧开始**第 1个不是NULL的值**。参数个数是可变的。
 
 ## 谓词
 
 ### LIKE谓词
 
+- 前方一致：
+    
+      SELECT * FROM samplelike WHERE strcol LIKE 'ddd%';
+
+- 中间一致：
+
+      SELECT * FROM samplelike WHERE strcol LIKE '%ddd%';
+      
+- 后方一致：
+
+      SELECT * FROM samplelike WHERE strcol LIKE '%ddd';
+      
+中间一致同时包含前方一致和后方一致的查询结果。
+
+- 下划线匹配任意 1 个字符
+
 ### BETWEEN谓词
+
+BETWEEN 的特点就是结果中会包含两个临界值，也就是闭区间。如果不想让结果中包含临界值，那就必须使用 < 和 >。
 
 ### IS NULL、 IS NOT NULL 
 
 ### IN谓词
 
+    SELECT product_name, purchase_price FROM product WHERE purchase_price IN (320, 500, 5000);
+
 ### EXIST 谓词
+
+EXIST 可以用来替换 IN ， NOT IN 可以用NOT EXIST来替换。
 
 ## CASE 表达式
 
+CASE表达式的语法分为简单CASE表达式和搜索CASE表达式两种。
 
+搜索CASE表达式语法：
+
+    CASE WHEN <求值表达式> THEN <表达式>
+         WHEN <求值表达式> THEN <表达式>
+         WHEN <求值表达式> THEN <表达式>
+         .
+         .
+         .
+    ELSE <表达式>
+    END  
+
+ELSE 子句也可以省略不写，这时会被默认为 ELSE NULL。但为了防止有人漏读，还是希望大家能够显示地写出 ELSE 子句。
 
 # 练习题
 
