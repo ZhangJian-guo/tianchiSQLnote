@@ -224,6 +224,7 @@ ELSE 子句也可以省略不写，这时会被默认为 ELSE NULL。但为了�
 
 提示：其中的关键是 avg_sale_price 列。与习题三不同，这里需要计算出的 是各商品种类的平均销售单价。这与使用关联子查询所得到的结果相同。 也就是说，该列可以使用关联子查询进行创建。问题就是应该在什么地方使用这个关联子查询。
 
+    
     CREATE VIEW AvgPriceByType AS 
     SELECT product_id, product_name, product_type, sale_price, 
           (SELECT AVG(sale_price)
@@ -256,7 +257,7 @@ ELSE 子句也可以省略不写，这时会被默认为 ELSE NULL。但为了�
       FROM product
      WHERE purchase_price NOT IN (500, 2800, 5000, NULL);
 
-查询结果为空，`NOT IN`的参数不能包含`NULL`，
+查询结果为空，`NOT IN`的参数不能包含`NULL`。
 
 ## 7
 
