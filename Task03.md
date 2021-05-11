@@ -179,11 +179,16 @@ ELSE 子句也可以省略不写，这时会被默认为 ELSE NULL。但为了�
 |T恤衫        |    1000    | 2009-09-20 |
 |菜刀         |    3000    | 2009-09-20 |
 
+    CREATE VIEW ViewPractice5_1 (product_name, sale_price, regist_date) AS 
+    SELECT product_name, sale_price, regist_date FROM product WHERE sale_price>= 1000 AND regist_date == '2009-09-20';
+
 ## 2 
 
 向习题一中创建的视图 ViewPractice5_1 中插入如下数据，会得到什么样的结果呢？
 
     INSERT INTO ViewPractice5_1 VALUES (' 刀子 ', 300, '2009-11-02');
+
+不满足原表约束条件，报错。
 
 ## 3 
 
@@ -199,6 +204,8 @@ ELSE 子句也可以省略不写，这时会被默认为 ELSE NULL。但为了�
 |0006       | 叉子         | 厨房用具      | 500        | 2097.5000000000000000|
 |0007       | 擦菜板       | 厨房用具       | 880       | 2097.5000000000000000|
 |0008       | 圆珠笔       | 办公用品       | 100       | 2097.5000000000000000|
+
+    SELECT product_id, product_name, product_type, sale_price, AVG(sale_price) AS sale_price_all FROM product
 
 ## 4 
 
@@ -217,9 +224,19 @@ ELSE 子句也可以省略不写，这时会被默认为 ELSE NULL。但为了�
 
 提示：其中的关键是 avg_sale_price 列。与习题三不同，这里需要计算出的 是各商品种类的平均销售单价。这与使用关联子查询所得到的结果相同。 也就是说，该列可以使用关联子查询进行创建。问题就是应该在什么地方使用这个关联子查询。
 
+    CREATE VIEW AvgPriceByType AS 
+    SELECT product_id, product_name, product_type, sale_price, 
+          (SELECT AVG(sale_price)
+           FROM product p2 
+           WHERE p1.product_type = p2.product_type 
+           GROUP BY p1.product_type) AS avg_sale_price 
+    FROM product p1; 
+
 ## 5
 
 运算或者函数中含有 NULL 时，结果全都会变为NULL ？（判断题）
+
+正确。
 
 ## 6
 
@@ -231,11 +248,15 @@ ELSE 子句也可以省略不写，这时会被默认为 ELSE NULL。但为了�
       FROM product
      WHERE purchase_price NOT IN (500, 2800, 5000);
 
+进货价格不为500, 2800, 5000的产品名称和进价。
+
 ②
 
     SELECT product_name, purchase_price
       FROM product
      WHERE purchase_price NOT IN (500, 2800, 5000, NULL);
+
+查询结果为空，`NOT IN`的参数不能包含`NULL`，
 
 ## 7
 
@@ -252,3 +273,8 @@ ELSE 子句也可以省略不写，这时会被默认为 ELSE NULL。但为了�
 |low_price | mid_price | high_price |
 |----------|-----------|------------|
 |        5 |         1 |         2  |
+
+    SELECT SUM(CASE WHEN sale_price < 1000 THEN 1 ELSE 0 END) AS low_price,
+           SUM(CASE WHEN sale_price >= 1000 AND sale_price <= 3000 THEN 1 ELSE 0 END) AS mid_price,
+           SUM(CASE WHEN sale_price > 3000 THEN 1 ELSE 0 END) AS high_price
+    FROM product;
