@@ -101,7 +101,7 @@ join：
     FROM product p1 CROSS JOIN product p1 
     WHERE p2.sale_price <= p1.sale_price) x
     ON p.product_id = x.product_id
-    ORDER BY sale_price;
+    ORDER BY p.sale_price;
 
 关联子查询：
 
@@ -110,4 +110,4 @@ join：
     FROM product p2 
     WHERE p1.sale_price >= p2.sale_price) AS sum_sale_price
     FROM product p1 
-    ORDER BY sale_price;
+    ORDER BY p1.sale_price;
