@@ -71,12 +71,15 @@ SQL 语句的 UNION 会对两个查询的结果集进行合并和去重, 这种�
 
 分别使用内连结和关联子查询每一类商品中售价最高的商品。
 
+join：
+
     SELECT product_name
     FROM product p1
     INNER JOIN 
     (SELECT product_type, MAX(sale_price) AS sale_price FROM product GROUP BY product_type) AS p2
     ON p1.sale_price = p2.sale_price AND p1.product_type = p2.product_type;
 
+关联子查询：
 
     SELECT product_name
     FROM product p1 
@@ -90,6 +93,8 @@ SQL 语句的 UNION 会对两个查询的结果集进行合并和去重, 这种�
 
 用关联子查询实现：在product表中，取出 product_id, product_name, sale_price, 并按照商品的售价从低到高进行排序、对售价进行累计求和。
 
+join：
+
     SELECT product_id, product_name, sale_price 
     FROM product p INNER JOIN 
     (SELECT p1.product_id, SUM(p2.sale_price) AS sum_sale_price 
@@ -98,6 +103,7 @@ SQL 语句的 UNION 会对两个查询的结果集进行合并和去重, 这种�
     ON p.product_id = x.product_id
     ORDER BY sale_price;
 
+关联子查询：
 
     SELECT product_id, product_name, sale_price, 
     (SELECT SUM(sale_price) 
