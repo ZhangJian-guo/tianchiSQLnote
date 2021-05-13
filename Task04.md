@@ -38,7 +38,7 @@ SQL 语句的 UNION 会对两个查询的结果集进行合并和去重, 这种�
 
     SELECT * FROM product WHERE sale_price > 500 
     UNION 
-    SELECT * FROM product2 WHERE sale_price > 500 
+    SELECT * FROM product2 WHERE sale_price > 500;
 
 # 4.2
 
@@ -58,16 +58,48 @@ SQL 语句的 UNION 会对两个查询的结果集进行合并和去重, 这种�
 
 每类商品中售价最高的商品都在哪些商店有售 ？
 
-    SELECT product_id FROM product WHERE sale_price = SELECT MAX(sale_price) FROM product GROUP BY product_type
+    SELECT shop_name FROM ShopProduct WHERE product_id IN
+    (SELECT product_id 
+    FROM product p1 
+    WHERE sale_price = 
+    (SELECT MAX(sale_price) 
+    FROM product p2 
+    WHERE p1.product_type = p2.product_type 
+    GROUP BY p1.product_type));
 
 # 4.4
 
 分别使用内连结和关联子查询每一类商品中售价最高的商品。
 
+    SELECT product_name
+    FROM product p1
+    INNER JOIN 
+    (SELECT product_type, MAX(sale_price) AS sale_price FROM product GROUP BY product_type) AS p2
+    ON p1.sale_price = p2.sale_price AND p1.product_type = p2.product_type;
 
+    SELECT product_name
+    FROM product p1 
+    WHERE sale_price = 
+    (SELECT MAX(sale_price) 
+    FROM product p2 
+    WHERE p1.product_type = p2.product_type 
+    GROUP BY p1.product_type);
 
 # 4.5
 
-用关联子查询实现：在product表中，取出 product_id, produc_name, slae_price, 并按照商品的售价从低到高进行排序、对售价进行累计求和。
+用关联子查询实现：在product表中，取出 product_id, product_name, sale_price, 并按照商品的售价从低到高进行排序、对售价进行累计求和。
 
+    SELECT product_id, product_name, sale_price 
+    FROM product p INNER JOIN 
+    (SELECT p1.product_id, SUM(p2.sale_price) AS sum_sale_price 
+    FROM product p1 CROSS JOIN product p1 
+    WHERE p2.sale_price <= p1.sale_price) x
+    ON p.product_id = x.product_id
+    ORDER BY sale_price;
     
+    SELECT product_id, product_name, sale_price, 
+    (SELECT SUM(sale_price) 
+    FROM product p2 
+    WHERE p1.sale_price >= p2.sale_price) AS sum_sale_price
+    FROM product p1 
+    ORDER BY sale_price;
