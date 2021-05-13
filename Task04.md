@@ -78,7 +78,6 @@ SQL 语句的 UNION 会对两个查询的结果集进行合并和去重, 这种�
     ON p1.sale_price = p2.sale_price AND p1.product_type = p2.product_type;
 
 
-
     SELECT product_name
     FROM product p1 
     WHERE sale_price = 
@@ -98,9 +97,8 @@ SQL 语句的 UNION 会对两个查询的结果集进行合并和去重, 这种�
     WHERE p2.sale_price <= p1.sale_price) x
     ON p.product_id = x.product_id
     ORDER BY sale_price;
-    
-    
-    
+
+
     SELECT product_id, product_name, sale_price, 
     (SELECT SUM(sale_price) 
     FROM product p2 
