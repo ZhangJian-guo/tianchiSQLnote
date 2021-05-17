@@ -123,11 +123,17 @@ ROLLUP 可以对多列进行汇总求小计和合计。
            ,MAX(sale_price) OVER (ORDER BY product_id) AS Current_max_price
       FROM product
 
-
+按照 product_id 排序后当前的最高价格。
 
 ## 5.2
 
 继续使用product表，计算出按照登记日期（regist_date）升序进行排列的各日期的销售单价（sale_price）的总额。排序是需要将登记日期为NULL 的“运动 T 恤”记录排在第 1 位（也就是将其看作比其他日期都早）
+
+    SELECT regist_date, 
+           product_name,
+           sale_price, 
+           OVER (PATITION BY regist_date ORDER BY regist_date NULLS FIRST) AS sum_sale_price
+    FROM product
 
 ## 5.3 
 
@@ -135,6 +141,8 @@ ROLLUP 可以对多列进行汇总求小计和合计。
 
 ① 窗口函数不指定PARTITION BY的效果是什么？
 
+不分组，全局排序。
+
 ② 为什么说窗口函数只能在SELECT子句中使用？实际上，在ORDER BY 子句使用系统并不会报错。
 
-
+因为SQL语言的执行顺序
