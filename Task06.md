@@ -43,3 +43,121 @@
 
 
     
+# 5
+
+在2016年6月期间，线上总体优惠券弃用率为多少？并找出优惠券弃用率最高的商家。
+
+总体弃用率：
+
+    SELECT SUM(abandoned)/SUM(received)
+    FROM
+    (SELECT p1.Merchant_id AS Merchant_id, received, abandoned FROM 
+    (SELECT Merchant_id, COUNT(User_id) AS received 
+     FROM `ccf_online_stage1_train` 
+     WHERE `Coupon_id` IS NOT NULL 
+            AND Date_received BETWEEN '2016-06-01' AND '2016-06-30' 
+     GROUP BY `Merchant_id`) 
+     as p1
+    LEFT OUTER JOIN  
+    (SELECT Merchant_id, COUNT(User_id) AS abandoned 
+     FROM `ccf_online_stage1_train` 
+     WHERE `Coupon_id` IS NOT NULL AND `Date` IS NULL GROUP BY `Merchant_id`
+            AND Date_received BETWEEN '2016-06-01' AND '2016-06-30')
+     as p2
+    ON p1.Merchant_id = p2.Merchant_id) p
+
+CASE方法：
+
+    SELECT SUM(CASE WHEN Date IS NULL AND Coupon_id IS NOT NULL
+     THEN 1
+     ELSE 0
+     END) /
+     SUM(CASE WHEN Coupon_id IS NOT NULL
+     THEN 1
+     ELSE 0
+     END) AS discard_rate
+    FROM ccf_online_stage1_train
+    WHERE Date_received BETWEEN '2016-06-01' AND '2016-06-30';
+
+弃⽤率最⾼的商家：
+
+
+    SELECT Merchant_id, (abandoned/received) AS abandoned_rate
+    FROM 
+    (SELECT p1.Merchant_id AS Merchant_id, received, abandoned FROM 
+    (SELECT Merchant_id, COUNT(User_id) AS received 
+     FROM `ccf_online_stage1_train` 
+     WHERE `Coupon_id` IS NOT NULL 
+     AND Date_received BETWEEN '2016-06-01' AND '2016-06-30' 
+     GROUP BY `Merchant_id`
+    ) as p1
+    LEFT OUTER JOIN  
+    (SELECT Merchant_id, COUNT(User_id) AS abandoned 
+     FROM `ccf_online_stage1_train` 
+     WHERE `Coupon_id` IS NOT NULL AND `Date` IS NULL 
+     AND Date_received BETWEEN '2016-06-01' AND '2016-06-30'
+     GROUP BY `Merchant_id`)as p2
+    ON p1.Merchant_id = p2.Merchant_id) p
+    ORDER BY abandoned_rate DESC
+
+CASE方法：
+
+    SELECT Merchant_id, 
+     SUM(CASE WHEN Date IS NULL AND Coupon_id IS NOT NULL 
+     THEN 1
+     ELSE 0
+     END) /
+     SUM(CASE WHEN Coupon_id IS NOT NULL
+     THEN 1
+     ELSE 0
+     END) AS discard_rate
+     FROM ccf_online_stage1_train
+    WHERE Date_received BETWEEN '2016-06-01' AND '2016-06-30'
+    GROUP BY Merchant_id
+    ORDER BY discard_rate DESC
+    LIMIT 1;
+
+
+# 6
+
+找出 pH=3.63的所有⽩葡萄酒，然后对其 residual sugar 量进⾏英式排名（⾮连续的排名）。
+
+    SELECT  pH,  `residual sugar`, RANK() OVER (ORDER BY  residual sugar ) AS RANK FROM `winequality-white` WHERE `pH` = 3.63
+    
+# 7 
+
+找出截止到2018年底市值最大的3个行业和每个行业市值最大的3个公司。
+
+市值最大的3个行业：
+
+    SELECT TYPE_NAME_CN,
+     SUM(MARKET_VALUE)
+     FROM `market data`
+    WHERE YEAR(END_DATE) = '2018-12-31'
+    GROUP BY TYPE_NAME_CN
+    ORDER BY SUM(MARKET_VALUE) DESC
+    LIMIT 3
+    
+每个行业市值最大的3个公司：
+
+    
+    
+# 8
+
+线上线下累计优惠券使用次数最多的顾客。
+
+    SELECT p.User_id, COUNT(p.Coupon_id) AS times FROM 
+    (SELECT * FROM `ccf_offline_stage1_train` WHERE `Coupon_id` IS NOT NULL AND `Date` IS NOT NULL AND LEFT(DATE,4) = 2016
+    UNION
+    SELECT * FROM `ccf_online_stage1_train` WHERE `Coupon_id` IS NOT NULL AND `Date` IS NOT NULL AND LEFT(DATE,4) = 2016) p
+    GROUP BY p.User_id
+    ORDER BY times DESC
+    LIMIT 1
+    
+# 9
+
+
+
+# 10
+
+
