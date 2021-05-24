@@ -133,31 +133,72 @@ CASE方法：
     SELECT TYPE_NAME_CN,
      SUM(MARKET_VALUE)
      FROM `market data`
-    WHERE YEAR(END_DATE) = '2018-12-31'
+    WHERE YEAR(END_DATE) <= 2018
     GROUP BY TYPE_NAME_CN
     ORDER BY SUM(MARKET_VALUE) DESC
     LIMIT 3
     
 每个行业市值最大的3个公司：
 
-    
+    SELECT TYPE_NAME_EN, TICKER_SYMBOL, MARKET_VALUE
+    FROM
+    (SELECT TYPE_NAME_EN, TICKER_SYMBOL, MARKET_VALUE, RANK() OVER (PARTITION BY TYPE_NAME_EN ORDER BY MARKET_VALUE) AS RANK
+     FROM `market data`
+     WHERE TYPE_NAME_EN IN
+     (SELECT TYPE_NAME_EN FROM
+     (SELECT TYPE_NAME_EN,
+      SUM(MARKET_VALUE)
+      FROM `market data`
+      WHERE YEAR (END_DATE) <= 2018
+      GROUP BY TYPE_NAME_EN
+      ORDER BY SUM(MARKET_VALUE) DESC
+      LIMIT 3) p1) p2)
+    WHERE RANK <= 3
     
 # 8
 
-线上线下累计优惠券使用次数最多的顾客。
+2016年6月线上线下累计优惠券使用次数最多的顾客。
 
     SELECT p.User_id, COUNT(p.Coupon_id) AS times FROM 
-    (SELECT * FROM `ccf_offline_stage1_train` WHERE `Coupon_id` IS NOT NULL AND `Date` IS NOT NULL AND LEFT(DATE,4) = 2016
+    (SELECT * FROM `ccf_offline_stage1_train` WHERE `Coupon_id` IS NOT NULL AND (LEFT(Date,6) = 201606 OR Date BETWEEN '2016-06-01' AND '2016-06-30')
     UNION
-    SELECT * FROM `ccf_online_stage1_train` WHERE `Coupon_id` IS NOT NULL AND `Date` IS NOT NULL AND LEFT(DATE,4) = 2016) p
+    SELECT * FROM `ccf_online_stage1_train` WHERE `Coupon_id` IS NOT NULL AND (LEFT(Date,6) = 201606 OR Date BETWEEN '2016-06-01' AND '2016-06-30')) p
     GROUP BY p.User_id
     ORDER BY times DESC
     LIMIT 1
     
 # 9
 
+所有年份中，按季度统计，⽩云机场旅客吞吐量最⾼的那⼀季度对应的净利润是多少?
 
+    SELECT *
+     FROM (SELECT TICKER_SYMBOL,
+     YEAR(END_DATE) Year,
+     QUARTER(END_DATE) QUARTER,
+     SUM(VALUE) Amount
+     FROM `company operating`
+     WHERE INDIC_NAME_EN = 'Baiyun Airport:Passenger throughput'
+     GROUP BY TICKER_SYMBOL,YEAR(END_DATE),QUARTER(END_DATE)
+     ORDER BY SUM(VALUE) DESC
+     LIMIT 1 ) BaseData
+     LEFT JOIN -- income statement
+     (SELECT TICKER_SYMBOL,
+     YEAR(END_DATE) Year,
+     QUARTER(END_DATE) QUARTER,
+     SUM(N_INCOME) Amount
+     FROM `income statement`
+     GROUP BY TICKER_SYMBOL,YEAR(END_DATE),QUARTER(END_DATE) ) Income
+     ON BaseData.TICKER_SYMBOL = Income.TICKER_SYMBOL
+     AND BaseData.Year = Income.Year
+     AND BaseData.QUARTER = Income.QUARTER
 
 # 10
 
+在2016年6⽉期间，线上线下累计被使⽤优惠券满减最多的前3名商家。
 
+    SELECT p.Merchant_id, SUM(SUBSTRING_INDEX(p.Discount_rate,':',-1)) AS SUM_DISCOUNT FROM 
+    (SELECT * FROM `ccf_offline_stage1_train` WHERE `Coupon_id` IS NOT NULL AND (LEFT(Date,6) = 201606 OR Date BETWEEN '2016-06-01' AND '2016-06-30')
+    UNION
+    SELECT * FROM `ccf_online_stage1_train` WHERE `Coupon_id` IS NOT NULL AND (LEFT(Date,6) = 201606 OR Date BETWEEN '2016-06-01' AND '2016-06-30')) p
+    GROUP BY p.Merchant_id
+    ORDER BY SUM_DISCOUNT DESC
