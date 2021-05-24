@@ -42,6 +42,40 @@
 # 4
 
 
+计算全社会⽤电量:第⼀产业:当⽉值在2015年⽤电最⾼峰是发⽣在哪⽉？并且相⽐去年同期增⻓/减少了多少个百分⽐？
+
+发生在哪月：
+
+    SELECT MONTH(PERIOD_DATE),
+     SUM(DATA_VALUE) FianlValue
+     FROM `macro industry`
+    WHERE INDIC_ID = '2020101522'
+     AND YEAR(PERIOD_DATE) = 2015
+    GROUP BY MONTH(PERIOD_DATE)
+    ORDER BY FianlValue DESC
+    LIMIT 1
+    
+去年同期：
+
+    SELECT BaseData.*,
+     (BaseData.FianlValue - YoY.FianlValue) / YoY.FianlValue YoY
+     SUM (SELECT PERIOD_DATE,
+     MAX(DATA_VALUE) FianlValue
+     FROM `macro industry`
+     WHERE INDIC_ID = '2020101522'
+     AND YEAR(PERIOD_DATE) = 2015
+     GROUP BY PERIOD_DATE 
+     ORDER BY FianlValue DESC
+     LIMIT 1) BaseData
+     LEFT JOIN -- YOY 
+     (SELECT PERIOD_DATE,
+     SUM(DATA_VALUE) FianlValue
+     FROM `macro industry`
+     WHERE INDIC_ID = '2020101522'
+     AND YEAR(PERIOD_DATE) = 2014
+     GROUP BY PERIOD_DATE ) YoY
+     ON YEAR(BaseData.PERIOD_DATE) = YEAR(YoY.PERIOD_DATE) + 1
+     AND MONTH(BaseData.PERIOD_DATE) = MONTH(YoY.PERIOD_DATE);    
     
 # 5
 
